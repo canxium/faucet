@@ -44,43 +44,43 @@ function Head() {
       <title>Paradigm MultiFaucet | Bootstrap your testnet wallet</title>
       <meta
         name="title"
-        content="Paradigm MultiFaucet | Bootstrap your testnet wallet"
+        content="Canxium Faucet | Bootstrap your testnet wallet"
       />
       <meta
         name="description"
-        content="MultiFaucet funds a wallet with ETH, wETH, DAI, and NFTs across 8 testnet networks, at once."
+        content="Canxium faucet funds a wallet with CAU."
       />
 
       {/* OG + Facebook */}
       <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://faucet.paradigm.xyz" />
+      <meta property="og:url" content="https://faucet.canxium.org" />
       <meta
         property="og:title"
-        content="Paradigm MultiFaucet | Bootstrap your testnet wallet"
+        content="Canxium Faucet | Bootstrap your testnet wallet"
       />
       <meta
         property="og:description"
-        content="MultiFaucet funds a wallet with ETH, wETH, DAI, and NFTs across 8 testnet networks, at once."
+        content="Canxium faucet funds a wallet with CAU."
       />
       <meta
         property="og:image"
-        content="https://faucet.paradigm.xyz/meta.png"
+        content="https://faucet.canxium.org/logo.png"
       />
 
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content="https://faucet.paradigm.xyz" />
+      <meta property="twitter:url" content="https://faucet.canxium.org" />
       <meta
         property="twitter:title"
-        content="Paradigm MultiFaucet | Bootstrap your testnet wallet"
+        content="Canxium Faucet | Bootstrap your testnet wallet"
       />
       <meta
         property="twitter:description"
-        content="MultiFaucet funds a wallet with ETH, wETH, DAI, and NFTs across 8 testnet networks, at once."
+        content="Canxium faucet funds a wallet with CAU."
       />
       <meta
         property="twitter:image"
-        content="https://faucet.paradigm.xyz/meta.png"
+        content="https://faucet.canxium.org/logo.png"
       />
     </HTMLHead>
   );
@@ -91,16 +91,7 @@ function Footer() {
   return (
     <div className={styles.layout__footer}>
       {/* Disclaimer */}
-      <p>
-        These smart contracts are being provided as is. No guarantee,
-        representation or warranty is being made, express or implied, as to the
-        safety or correctness of the user interface or the smart contracts. They
-        have not been audited and as such there can be no assurance they will
-        work as intended, and users may experience delays, failures, errors,
-        omissions or loss of transmitted information. Paradigm is not liable for
-        any of the foregoing. Users should proceed with caution and use at their
-        own risk.
-      </p>
+      <a href="https://github.com/canxium/faucet">Github</a>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 {
-  "name": "multifaucet",
-  "author": "Anish Agnihotri",
+  "name": "canxium faucet",
+  "author": "Neo Krypt",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
@@ -16,7 +16,7 @@
     "ethers": "^5.4.7",
     "ioredis": "^4.28.0",
     "next": "^12.0.4",
-    "next-auth": "^3.29.0",
+    "next-auth": "^4.23.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-toastify": "^8.0.3",

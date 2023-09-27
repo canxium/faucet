@@ -8,7 +8,7 @@ import styles from "styles/Home.module.scss"; // Styles
 import { ReactElement, useState } from "react"; // Local state + types
 import { getAddressDetails } from "utils/addresses"; // Faucet addresses
 import { hasClaimed } from "pages/api/claim/status"; // Claim status
-import { signIn, getSession, signOut } from "next-auth/client"; // Auth
+import { getSession, signIn, signOut } from "next-auth/react"
 
 /**
  * Check if a provided address is valid
@@ -61,6 +61,8 @@ export default function Home({
   const [address, setAddress] = useState<string>(prefilledAddress);
   // Claimed status
   const [claimed, setClaimed] = useState<boolean>(initialClaimed);
+  // Claimed tx hash
+  const [claimedTx, setClaimedTx] = useState<string>("");
   // First claim
   const [firstClaim, setFirstClaim] = useState<boolean>(false);
   // Loading status
@@ -80,10 +82,12 @@ export default function Home({
 
     try {
       // Post new claim with recipient address
-      await axios.post("/api/claim/new", { address, others: claimOther });
+      let res = await axios.post("/api/claim/new", { address, others: claimOther });
       // Toast if success + toggle claimed
-      toast.success("Tokens dispersed—check balances shortly!");
+      console.log(res.data)
+      toast.success(`Faucet dispersed—check balances shortly!`);
       setClaimed(true);
+      setClaimedTx(res.data.tx.hash);
       setFirstClaim(true);
     } catch (error: any) {
       // If error, toast error message
@@ -100,30 +104,21 @@ export default function Home({
       <div className={styles.home__cta}>
         <div>
           <a
-            href="https://paradigm.xyz"
+            href="https://canxium.org"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Image src="/logo.svg" height="42.88px" width="180px" />
+            <Image src="/logo.png" height="42.88px" width="180px" />
           </a>
         </div>
         <h1>Bootstrap your testnet wallet</h1>
-        <span>
-          MultiFaucet funds a wallet with{" "}
-          <TokenLogo name="ETH" imageSrc="/tokens/eth.png" />
-          , <TokenLogo name="wETH" imageSrc="/tokens/weth.png" />,
-          <TokenLogo name="DAI" imageSrc="/tokens/dai.svg" />, and{" "}
-          <TokenLogo name="NFTs" imageSrc="/tokens/punks.png" /> across{" "}
-          {`${networkCount} `}
-          testnet networks, at once.
-        </span>
       </div>
 
       {/* Claim from facuet card */}
       <div className={styles.home__card}>
         {/* Card title */}
         <div className={styles.home__card_title}>
-          <h3>Request Tokens</h3>
+          <h3>Request Faucet</h3>
         </div>
 
         {/* Card content */}
@@ -161,24 +156,30 @@ export default function Home({
                 <div className={styles.content__claimed}>
                   <p>
                     {firstClaim
-                      ? "You have successfully claimed tokens. You can request again in 24 hours."
-                      : "You have already claimed tokens today. Please try again in 24 hours."}
+                      ? "You have successfully claimed. You can request again in 24 hours."
+                      : "You have already claimed today. Please try again in 24 hours."}
                   </p>
 
                   <input
                     type="text"
-                    placeholder="0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B"
+                    placeholder=""
                     disabled
                   />
+                  {/* Other networks checkbox */}
+                  <div className={styles.content__unclaimed_others}>
+                    <label>
+                      <a href={"https://cerium-explorer.canxium.net/tx/" + claimedTx} target="_blank">{claimedTx}</a>
+                    </label>
+                  </div>
                   <button className={styles.button__main} disabled>
-                    Tokens Already Claimed
+                    Claimed
                   </button>
                 </div>
               ) : (
                 // If user has not claimed in 24h
                 <div className={styles.content__unclaimed}>
                   {/* Claim description */}
-                  <p>Enter your Ethereum address to receive tokens:</p>
+                  <p>Enter your Canxium address to receive faucet:</p>
 
                   {/* Address input */}
                   <input
@@ -187,19 +188,6 @@ export default function Home({
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                   />
-
-                  {/* Other networks checkbox */}
-                  <div className={styles.content__unclaimed_others}>
-                    <input
-                      type="checkbox"
-                      value={claimOther.toString()}
-                      onChange={() => setClaimOther((previous) => !previous)}
-                    />
-                    <label>
-                      Drip on additional networks (besides Rinkeby, Ropsten,
-                      Kovan, and Görli)
-                    </label>
-                  </div>
 
                   {isValidInput(address) ? (
                     // If address is valid, allow claiming
@@ -230,92 +218,6 @@ export default function Home({
             </div>
           )}
         </div>
-      </div>
-
-      {/* Faucet details card */}
-      <div className={styles.home__card}>
-        {/* Card title */}
-        <div className={styles.home__card_title}>
-          <h3>Faucet Details</h3>
-        </div>
-
-        {/* General information */}
-        <div>
-          <div className={styles.home__card_content_section}>
-            <h4>General Information</h4>
-            <p>
-              Your Twitter account must have at least 1 Tweet, 15 followers, and
-              be older than 1 month.
-            </p>
-            <p className={styles.home__card_content_section_lh}>
-              By default, the faucet drips on the Ethereum testnets (Rinkeby,
-              Ropsten, Kovan, Görli). You can choose to receive a drip on other
-              networks when requesting tokens.
-            </p>
-            <p>You can claim from the faucet once every 24 hours.</p>
-          </div>
-        </div>
-
-        {/* Network details */}
-        {sortedAddresses.map((network) => {
-          // For each network
-          return (
-            <div key={network.network}>
-              <div className={styles.home__card_content_section}>
-                {/* Network name */}
-                <h4>
-                  {network.formattedName}
-                  {network.connectionDetails ? (
-                    <span>
-                      {" "}
-                      (
-                      <a
-                        href={network.connectionDetails}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        connection details
-                      </a>
-                      ,
-                      {network.autoconnect ? (
-                        // Display network add button if non-default network
-                        <AddNetworkButton autoconnect={network.autoconnect} />
-                      ) : null}
-                      )
-                    </span>
-                  ) : null}
-
-                  {/* Optional depleted status */}
-                  {network.depleted ? (
-                    <span className={styles.home__card_depleted}>
-                      {" "}
-                      (maintenance mode)
-                    </span>
-                  ) : null}
-                </h4>
-
-                {/* Optional network disclaimer */}
-                {network.disclaimer ? <span>{network.disclaimer}</span> : null}
-
-                {Object.entries(network.addresses).map(([name, address]) => {
-                  // For each network address
-                  return (
-                    // Address description: address
-                    <p key={name}>
-                      {name}:{" "}
-                      <TokenAddress
-                        etherscanPrefix={network.etherscanPrefix}
-                        name={name}
-                        address={address}
-                        ERC20={name != "NFTs"}
-                      />
-                    </p>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
       </div>
     </Layout>
   );

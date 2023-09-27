@@ -1,15 +1,30 @@
-# MultiFaucet
+# Canxium Faucet
 
-MultiFaucet drips ETH, tokens, and NFTs across many testnet networks, at once.
+Canxium Faucet drips CAU for testnet wallet.
 
 READMEs can be found individual subdirectories:
 
-- [MultiFaucet contracts](https://github.com/Anish-Agnihotri/MultiFaucet/tree/master/contracts)
-- [Associated frontend](https://github.com/Anish-Agnihotri/MultiFaucet/tree/master/frontend)
+- [Associated frontend](https://github.com/canxium/faucet/tree/master/frontend)
 
 ## License
 
-[GNU Affero GPL v3.0](https://github.com/Anish-Agnihotri/MultiFaucet/blob/master/LICENSE)
+[GNU Affero GPL v3.0](https://github.com/canxium/faucet/blob/master/LICENSE)
+
+Origin source code developed by @Anish-Agnihotri
+
+## Run locally
+
+```bash
+# Install dependencies
+npm install
+
+# Update environment variables
+cp .env.sample .env.local
+vim .env.local
+
+# Run
+npm run dev
+```
 
 ## Disclaimer
 
