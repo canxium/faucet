@@ -5,17 +5,17 @@ export const authOptions = {
   providers: [
     // Twitter OAuth provider
     TwitterProvider({
-      clientId: process.env.TWITTER_CLIENT_ID,
-      clientSecret: process.env.TWITTER_CLIENT_SECRET,
+      clientId: process.env.TWITTER_CLIENT_ID || "",
+      clientSecret: process.env.TWITTER_CLIENT_SECRET || "",
       version: "2.0", // opt-in to Twitter OAuth 2.0
     }),
   ],
   secret: process.env.NEXTAUTH_JWT_SECRET,
   callbacks: {
-    async redirect({ url, baseUrl }) {
+    async redirect({ baseUrl }: any) {
       return baseUrl
     },
-    async session({ session, user, token }) {
+    async session({ session, user, token }: any) {
       session.twitter_id = token.twitter_id;
       session.twitter_handle = token.twitter_handle;
       session.twitter_num_tweets = token.twitter_num_tweets;
@@ -24,7 +24,7 @@ export const authOptions = {
 
       return session
     },
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user }: any) {
        // Check if user is signing in (versus logging out)
       const isSignIn = user ? true : false;
 
@@ -40,7 +40,7 @@ export const authOptions = {
       
       return token
     },
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ }) {
       return true
     },
   }
